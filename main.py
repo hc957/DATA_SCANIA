@@ -9,7 +9,7 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter.filedialog import askdirectory
 from tkinter import ttk
-from data_format import *
+from data_format import DataFormat
 
 
 # from scrapy_list import scrapy_total
@@ -23,6 +23,7 @@ class Application(tk.Frame):
         self.pack()
         self.askdirectory = tk.StringVar()
         self.askdirectory2 = tk.StringVar()
+        self.askdirectory3 = tk.StringVar()
         root.geometry('650x345')
         root.minsize(345, 250)
         root.maxsize(1024, 768)
@@ -32,14 +33,18 @@ class Application(tk.Frame):
         self.intWind()
 
     def buttonActive(self):
-        dire = self.askdirectory.get()
+        stu_info_dire = self.askdirectory.get()
+        stu_exam_dire = self.askdirectory2.get()
+        stu_finance_dire = self.askdirectory3.get()
 
-        if len(dire) == 0:
-            messagebox.showinfo('提示:', '没有选择文件')
-            return
+        # if len(dire) == 0:
+        #     messagebox.showinfo('提示:', '没有选择文件')
+        #     return
 
-        df = DataFormat()
-        df.stu_format()
+        df = DataFormat(stu_info_dire, stu_exam_dire, stu_finance_dire)
+        df.stu_info_format(stu_info_dire)
+        df.stu_exam_format(stu_exam_dire)
+        df.stu_finance_format(stu_finance_dire)
 
         messagebox.showinfo('提示:', '数据转换完成')
 
@@ -48,35 +53,43 @@ class Application(tk.Frame):
         self.tenantIds.delete(0, 'end')
         self.askdirectory.delete(0, 'end')
 
-    def selectpath(self):
-        path_ = askdirectory()
-        askdirectory.set(path_)
-        return path_
+    @staticmethod
+    def select_stu_info_path(self):
+        stu_info_path_ = askdirectory()
+        askdirectory.set(stu_info_path_)
+        return stu_info_path_
 
-    def select_settings_path(self):
-        path2_ = askdirectory2()
-        askdirectory2.set(path2_)
-        return path2_
+    @staticmethod
+    def select_stu_exam_path(self):
+        stu_exam_path_ = self.askdirectory2()
+        self.askdirectory2.set(stu_exam_path_)
+        return stu_exam_path_
+
+    @staticmethod
+    def select_stu_finance_path(self):
+        stu_finance_path_ = self.askdirectory3()
+        self.askdirectory3.set(stu_finance_path_)
+        return stu_finance_path_
 
     def intWind(self):
+        frame1 = Frame(self)
+        Label(frame1, text='请输入学员档案路径:').grid(row=2, column=0)
+        Entry(frame1, textvariable='').grid(row=2, column=1)
+        Button(frame1, text='学员档案路径', command=self.select_stu_info_path).grid(row=2, column=2)
+
+        frame2 = Frame(self)
+        Label(frame2, text='请输入考试记录路径:').grid(row=3, column=0)
+        Entry(frame2, textvariable=self.askdirectory2).grid(row=3, column=1)
+        Button(frame2, text='交管记录路径', command=self.select_stu_exam_path).grid(row=3, column=2)
+
         frame3 = Frame(self)
-        Label(frame3, text='请输入学员档案路径:').grid(row=2, column=0)
-        Entry(frame3, textvariable=self.askdirectory).grid(row=2, column=1)
-        Button(frame3, text='学员档案路径', command=self.selectstuinfopath).grid(row=2, column=2)
+        Label(frame3, text='请输入学员财务路径:').grid(row=4, column=0)
+        Entry(frame3, textvariable=self.askdirectory3).grid(row=4, column=1)
+        Button(frame3, text='学员财务路径', command=self.select_stu_finance_path).grid(row=4, column=2)
 
-        frame5 = Frame(self)
-        Label(frame5, text='请输入交管考试记录路径:').grid(row=3, column=0)
-        Entry(frame5, textvariable=self.askdirectory).grid(row=3, column=1)
-        Button(frame5, text='交管考试记录路径', command=self.selectstuexampath).grid(row=3, column=2)
-
-        frame4 = Frame(self)
-        Label(frame4, text='请输入学员财务路径:').grid(row=4, column=0)
-        Entry(frame4, textvariable=self.askdirectory2).grid(row=4, column=1)
-        Button(frame4, text='学员财务路径', command=self.selectstufinancepath).grid(row=4, column=2)
-
+        frame1.grid(pady=3)
+        frame2.grid(pady=3)
         frame3.grid(pady=3)
-        frame4.grid(pady=3)
-        frame5.grid(pady=3)
 
         Button(self, text='开始转换', width=5, command=self.buttonActive).grid()
         Button(self, text='退出', width=5, command=self.quit).grid()
