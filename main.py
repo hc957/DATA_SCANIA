@@ -22,29 +22,27 @@ class Application(tk.Frame):
         self.master = root
         self.pack()
         self.askdirectory = tk.StringVar()
-        self.askdirectory2 = tk.StringVar()
-        self.askdirectory3 = tk.StringVar()
+        self.tenant_id = tk.StringVar()
         root.geometry('650x345')
         root.minsize(345, 250)
         root.maxsize(1024, 768)
         root.title('斯堪尼亚数据助手')
         # root.iconbitmap()
 
-        self.intWind()
+        self.intwind()
 
-    def buttonActive(self):
+    def buttonactive(self):
         stu_info_dire = self.askdirectory.get()
-        stu_exam_dire = self.askdirectory2.get()
-        stu_finance_dire = self.askdirectory3.get()
+        tenant_id = self.tenantIds.get()
 
         # if len(dire) == 0:
         #     messagebox.showinfo('提示:', '没有选择文件')
         #     return
 
-        df = DataFormat(stu_info_dire, stu_exam_dire, stu_finance_dire)
+        df = DataFormat(stu_info_dire, tenant_id)
         df.stu_info_format(stu_info_dire)
-        df.stu_exam_format(stu_exam_dire)
-        df.stu_finance_format(stu_finance_dire)
+        df.stu_exam_format(stu_exam_dire, tenant_id)
+        df.stu_finance_format(stu_finance_dire, tenant_id)
 
         messagebox.showinfo('提示:', '数据转换完成')
 
@@ -60,40 +58,26 @@ class Application(tk.Frame):
         return stu_info_path_
 
     @staticmethod
-    def select_stu_exam_path(self):
-        stu_exam_path_ = self.askdirectory2()
-        self.askdirectory2.set(stu_exam_path_)
-        return stu_exam_path_
+    def tenant_id(self):
+        tenant_id = self.tenant_id()
+        self.tenant_id.set(tenant_id)
+        return tenant_id
 
-    @staticmethod
-    def select_stu_finance_path(self):
-        stu_finance_path_ = self.askdirectory3()
-        self.askdirectory3.set(stu_finance_path_)
-        return stu_finance_path_
-
-    def intWind(self):
+    def intwind(self):
         frame1 = Frame(self)
-        Label(frame1, text='请输入学员档案路径:').grid(row=2, column=0)
+        Label(frame1, text='请输入文件路径:', fg='red').grid(row=2, column=0)
         Entry(frame1, textvariable='').grid(row=2, column=1)
-        Button(frame1, text='学员档案路径', command=self.select_stu_info_path).grid(row=2, column=2)
+        Button(frame1, text='文件路径', command=self.select_stu_info_path).grid(row=2, column=2)
 
         frame2 = Frame(self)
-        Label(frame2, text='请输入考试记录路径:').grid(row=3, column=0)
-        Entry(frame2, textvariable=self.askdirectory2).grid(row=3, column=1)
-        Button(frame2, text='交管记录路径', command=self.select_stu_exam_path).grid(row=3, column=2)
+        Label(frame2, text='   请输入驾校ID:', fg='red').grid(row=3, column=0, sticky=E)
+        Entry(frame2, textvariable=self.tenant_id).grid(row=3, column=1)
 
-        frame3 = Frame(self)
-        Label(frame3, text='请输入学员财务路径:').grid(row=4, column=0)
-        Entry(frame3, textvariable=self.askdirectory3).grid(row=4, column=1)
-        Button(frame3, text='学员财务路径', command=self.select_stu_finance_path).grid(row=4, column=2)
+        frame1.grid(pady=3, sticky=W)
+        frame2.grid(pady=3, sticky=W)
 
-        frame1.grid(pady=3)
-        frame2.grid(pady=3)
-        frame3.grid(pady=3)
-
-        Button(self, text='开始转换', width=5, command=self.buttonActive).grid()
+        Button(self, text='开始转换', width=5, command=self.buttonactive).grid()
         Button(self, text='退出', width=5, command=self.quit).grid()
-
 
     # def create_page(self):
     #     # self.about_frame = Frame(self)

@@ -201,7 +201,7 @@ def expire_warning():
 
 
 def student_info():
-    order = ['学员编号1', '学员编号2',
+    order = [
              '原学员编号',
              '学员姓名',
              '国籍',
