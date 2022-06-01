@@ -39,10 +39,10 @@ class Application(tk.Frame):
         #     messagebox.showinfo('提示:', '没有选择文件')
         #     return
 
-        df = DataFormat(stu_info_dire, tenant_id)
+        df = DataFormat(stu_info_dire)
         df.stu_info_format(stu_info_dire)
-        df.stu_exam_format(stu_exam_dire, tenant_id)
-        df.stu_finance_format(stu_finance_dire, tenant_id)
+        df.stu_finance_format_multi_bill(stu_info_dire, tenant_id)
+        df.stu_finance_format_single_bill(stu_info_dire, tenant_id)
 
         messagebox.showinfo('提示:', '数据转换完成')
 
@@ -66,7 +66,7 @@ class Application(tk.Frame):
     def intwind(self):
         frame1 = Frame(self)
         Label(frame1, text='请输入文件路径:', fg='red').grid(row=2, column=0)
-        Entry(frame1, textvariable='').grid(row=2, column=1)
+        Entry(frame1, textvariable=self.askdirectory).grid(row=2, column=1)
         Button(frame1, text='文件路径', command=self.select_stu_info_path).grid(row=2, column=2)
 
         frame2 = Frame(self)
@@ -74,7 +74,7 @@ class Application(tk.Frame):
         Entry(frame2, textvariable=self.tenant_id).grid(row=3, column=1)
 
         frame1.grid(pady=3, sticky=W)
-        frame2.grid(pady=3, sticky=W)
+        # frame2.grid(pady=3, sticky=W)
 
         Button(self, text='开始转换', width=5, command=self.buttonactive).grid()
         Button(self, text='退出', width=5, command=self.quit).grid()
